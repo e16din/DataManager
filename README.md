@@ -1,5 +1,8 @@
 # DataManager
-Simple way to save and load your data
+The simple way to save and load your data. 
+Based on [SharedPreferences](https://developer.android.com/reference/android/content/SharedPreferences.html) and [GSON](https://github.com/google/gson).
+
+[![Release](https://jitpack.io/v/e16din/DataManager.svg)](https://jitpack.io/#e16din/DataManager)
 
 ## Init
 ```java
