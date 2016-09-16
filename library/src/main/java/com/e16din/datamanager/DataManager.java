@@ -39,7 +39,7 @@ public final class DataManager {
         try {
             return PreferenceManager.getDefaultSharedPreferences(context);
         } catch (NullPointerException e) {
-            throw new NullPointerException("Please initialize LightUtils before use DataManager. LightUtils.init(context))");
+            throw new NullPointerException("Please initialize DataManager. DataManager.init(context))");
         }
     }
 
