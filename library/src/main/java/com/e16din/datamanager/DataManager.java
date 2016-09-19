@@ -145,18 +145,34 @@ public final class DataManager {
 
     public int loadInt(final String key, int defaultValue) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
-            return -1;
+            return defaultValue;
         }
 
         return getDefaultSharedPreferences().getInt(key, defaultValue);
     }
 
     public long loadLong(final String key) {
+        return loadLong(key, -1L);
+    }
+
+    public long loadLong(final String key, long defaultValue) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
-            return -1L;
+            return defaultValue;
         }
 
-        return getDefaultSharedPreferences().getLong(key, -1L);
+        return getDefaultSharedPreferences().getLong(key, defaultValue);
+    }
+
+    public float loadFloat(final String key) {
+        return loadFloat(key, -1f);
+    }
+
+    public float loadFloat(final String key, float defaultValue) {
+        if (TextUtils.isEmpty(key) || !contains(key)) {
+            return defaultValue;
+        }
+
+        return getDefaultSharedPreferences().getFloat(key, defaultValue);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -166,14 +182,6 @@ public final class DataManager {
         }
 
         return getDefaultSharedPreferences().getStringSet(key, null);
-    }
-
-    public float loadFloat(final String key) {
-        if (TextUtils.isEmpty(key) || !contains(key)) {
-            return -1f;
-        }
-
-        return getDefaultSharedPreferences().getFloat(key, -1f);
     }
 
 
