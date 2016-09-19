@@ -41,5 +41,5 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.github.e16din:DataManager:0.1.0'
+    compile 'com.github.e16din:DataManager:0.1.1'
 }

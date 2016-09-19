@@ -140,11 +140,15 @@ public final class DataManager {
     }
 
     public int loadInt(final String key) {
+        return loadInt(key, -1);
+    }
+
+    public int loadInt(final String key, int defaultValue) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return -1;
         }
 
-        return getDefaultSharedPreferences().getInt(key, -1);
+        return getDefaultSharedPreferences().getInt(key, defaultValue);
     }
 
     public long loadLong(final String key) {
