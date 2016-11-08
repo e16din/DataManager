@@ -13,222 +13,186 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 
-public class DataManager {
+public final class DataManager {
 
-    private Context mContext;
-    private Gson mGson = new Gson();
-    private boolean mNeedCommit = true;
+    private static SharedPreferences sPreferences;
+    private static Gson sGson = new Gson();
+    private static boolean sNeedCommit = true;
 
 
-    private static class Holder {
-        public static final DataManager HOLDER_INSTANCE = new DataManager();
+    private DataManager() {
     }
 
-    public static DataManager instance() {
-        return Holder.HOLDER_INSTANCE;
-    }
 
     public static void init(Context context) {
-        instance().setContext(context);
+        sPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-
-    public void setContext(Context context) {
-        mContext = context;
-    }
-
-    public SharedPreferences getDefaultSharedPreferences() {
+    public static SharedPreferences getSharedPreferences() {
         try {
-            return PreferenceManager.getDefaultSharedPreferences(mContext);
+            return sPreferences;
         } catch (NullPointerException e) {
             throw new NullPointerException("Please initialize DataManager. DataManager.init(sContext))");
         }
     }
 
-    public boolean contains(final String key) {
-        return getDefaultSharedPreferences().contains(key);
+    public static boolean contains(final String key) {
+        return getSharedPreferences().contains(key);
     }
 
-    public <T> void save(final String key, final T data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putString(key, mGson.toJson(data));
-        apply(editor);
+    public static void putToEditor(SharedPreferences.Editor editor, String key, Object value) {
+        if (value instanceof Integer) {
+            editor.putInt(key, (Integer) value);
+        } else if (value instanceof Boolean) {
+            editor.putBoolean(key, (Boolean) value);
+        } else if (value instanceof String) {
+            editor.putString(key, (String) value);
+        } else if (value instanceof Long) {
+            editor.putLong(key, (Long) value);
+        } else if (value instanceof Float) {
+            editor.putFloat(key, (Float) value);
+        } else {
+            editor.putString(key, getGson().toJson(value));
+        }
     }
 
-    public void saveAll(final Set<Map.Entry<String, Object>> data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
+    public static void saveAll(final Set<Map.Entry<String, Object>> data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
 
         for (Map.Entry<String, Object> object : data) {
             final Object value = object.getValue();
             final String key = object.getKey();
 
-            if (value instanceof Integer) {
-                editor.putInt(key, (Integer) value);
-            } else if (value instanceof Boolean) {
-                editor.putBoolean(key, (Boolean) value);
-            } else if (value instanceof String) {
-                editor.putString(key, (String) value);
-            } else if (value instanceof Long) {
-                editor.putLong(key, (Long) value);
-            } else if (value instanceof Float) {
-                editor.putFloat(key, (Float) value);
-            } else {
-                editor.putString(key, mGson.toJson(data));
-            }
+            putToEditor(editor, key, value);
         }
 
         apply(editor);
     }
 
-    public void saveAll(final Map<String, Object> data) {
+    public static void saveAll(final Map<String, Object> data) {
         saveAll(data.entrySet());
     }
 
-    public void save(final String key, final boolean data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putBoolean(key, data);
-        apply(editor);
-    }
-
-    public void save(final String key, final String data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putString(key, data);
-        apply(editor);
-    }
-
-    public void save(final String key, final int data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putInt(key, data);
-        apply(editor);
-    }
-
-    public void save(final String key, final long data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putLong(key, data);
-        apply(editor);
-    }
-
-    public void save(final String key, final float data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putFloat(key, data);
+    public static void save(final String key, final Object data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
+        putToEditor(editor, key, data);
         apply(editor);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void save(final String key, final Set<String> data) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
+    public static void save(final String key, final Set<String> data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.putStringSet(key, data);
         apply(editor);
     }
 
-    private void apply(SharedPreferences.Editor editor) {
-        if (mNeedCommit) {
+    private static void apply(SharedPreferences.Editor editor) {
+        if (needCommit()) {
             editor.commit();
         } else {
             editor.apply();
         }
     }
 
-    public void remove(String key) {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
+    public static void remove(String key) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.remove(key);
         apply(editor);
     }
 
-    public void clear() {
-        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
+    public static void clear() {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.clear();
         apply(editor);
     }
 
-    public <T> T load(final String key, final Type type) {
+    public static <T> T load(final String key, final Type type) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return null;
         }
 
-        final String string = getDefaultSharedPreferences().getString(key, null);
+        final String string = getSharedPreferences().getString(key, null);
         if (string == null) {
             return null;
         }
 
-        return mGson.fromJson(string, type);
+        return sGson.fromJson(string, type);
     }
 
-    public String loadString(final String key) {
+    public static String loadString(final String key) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return null;
         }
 
-        return getDefaultSharedPreferences().getString(key, null);
+        return getSharedPreferences().getString(key, null);
     }
 
-    public boolean loadBool(final String key) {
+    public static boolean loadBool(final String key) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return false;
         }
 
-        return getDefaultSharedPreferences().getBoolean(key, false);
+        return getSharedPreferences().getBoolean(key, false);
     }
 
-    public int loadInt(final String key) {
+    public static int loadInt(final String key) {
         return loadInt(key, -1);
     }
 
-    public int loadInt(final String key, int defaultValue) {
+    public static int loadInt(final String key, int defaultValue) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return defaultValue;
         }
 
-        return getDefaultSharedPreferences().getInt(key, defaultValue);
+        return getSharedPreferences().getInt(key, defaultValue);
     }
 
-    public long loadLong(final String key) {
+    public static long loadLong(final String key) {
         return loadLong(key, -1L);
     }
 
-    public long loadLong(final String key, long defaultValue) {
+    public static long loadLong(final String key, long defaultValue) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return defaultValue;
         }
 
-        return getDefaultSharedPreferences().getLong(key, defaultValue);
+        return getSharedPreferences().getLong(key, defaultValue);
     }
 
-    public float loadFloat(final String key) {
+    public static float loadFloat(final String key) {
         return loadFloat(key, -1f);
     }
 
-    public float loadFloat(final String key, float defaultValue) {
+    public static float loadFloat(final String key, float defaultValue) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return defaultValue;
         }
 
-        return getDefaultSharedPreferences().getFloat(key, defaultValue);
+        return getSharedPreferences().getFloat(key, defaultValue);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public Set<String> loadStringSet(final String key) {
+    public static Set<String> loadStringSet(final String key) {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return null;
         }
 
-        return getDefaultSharedPreferences().getStringSet(key, null);
+        return getSharedPreferences().getStringSet(key, null);
     }
 
-
-    public boolean needCommit() {
-        return mNeedCommit;
+    public static boolean needCommit() {
+        return sNeedCommit;
     }
 
-    public void setNeedCommit(boolean needCommit) {
-        this.mNeedCommit = needCommit;
+    public static void setNeedCommit(boolean needCommit) {
+        sNeedCommit = needCommit;
     }
 
-    public Gson getGson() {
-        return mGson;
+    public static Gson getGson() {
+        return sGson;
     }
 
-    public void setGson(Gson gson) {
-        this.mGson = gson;
+    public static void setGson(Gson gson) {
+        sGson = gson;
     }
 }

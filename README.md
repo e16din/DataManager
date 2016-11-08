@@ -19,12 +19,12 @@ public void onCreate() {
 
 ```java
 //save
-DataManager.getInstance().save(KEY_TOKEN, accessToken);
+DataManager.save(KEY_TOKEN, accessToken);
 
 //load
-DataManager.getInstance().loadString(KEY_TOKEN);
+DataManager.loadString(KEY_TOKEN);
 //or load
-DataManager.getInstance().load(KEY_USER, User.class);
+DataManager.load(KEY_USER, User.class);
 ```
 
 ## Download (Gradle)
@@ -41,5 +41,5 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.github.e16din:DataManager:0.1.4'
+    compile 'com.github.e16din:DataManager:0.2.0'
 }
