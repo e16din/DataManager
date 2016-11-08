@@ -10,36 +10,38 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 import java.util.Set;
 
-public final class DataManager {
+public class DataManager {
 
-    private static Context context;
+    private Context mContext;
+    private Gson mGson = new Gson();
+    private boolean mNeedCommit = true;
 
-    private Gson gson = new Gson();
-
-    private boolean needCommit = true;
 
     private static class Holder {
         public static final DataManager HOLDER_INSTANCE = new DataManager();
     }
 
-    private DataManager() {
+    public static DataManager instance() {
+        return Holder.HOLDER_INSTANCE;
     }
 
     public static void init(Context context) {
-        DataManager.context = context;
+        instance().setContext(context);
     }
 
-    public static DataManager getInstance() {
-        return Holder.HOLDER_INSTANCE;
+
+    public void setContext(Context context) {
+        mContext = context;
     }
 
     public SharedPreferences getDefaultSharedPreferences() {
         try {
-            return PreferenceManager.getDefaultSharedPreferences(context);
+            return PreferenceManager.getDefaultSharedPreferences(mContext);
         } catch (NullPointerException e) {
-            throw new NullPointerException("Please initialize DataManager. DataManager.init(context))");
+            throw new NullPointerException("Please initialize DataManager. DataManager.init(sContext))");
         }
     }
 
@@ -49,8 +51,37 @@ public final class DataManager {
 
     public <T> void save(final String key, final T data) {
         final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putString(key, gson.toJson(data));
+        editor.putString(key, mGson.toJson(data));
         apply(editor);
+    }
+
+    public void saveAll(final Set<Map.Entry<String, Object>> data) {
+        final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
+
+        for (Map.Entry<String, Object> object : data) {
+            final Object value = object.getValue();
+            final String key = object.getKey();
+
+            if (value instanceof Integer) {
+                editor.putInt(key, (Integer) value);
+            } else if (value instanceof Boolean) {
+                editor.putBoolean(key, (Boolean) value);
+            } else if (value instanceof String) {
+                editor.putString(key, (String) value);
+            } else if (value instanceof Long) {
+                editor.putLong(key, (Long) value);
+            } else if (value instanceof Float) {
+                editor.putFloat(key, (Float) value);
+            } else {
+                editor.putString(key, mGson.toJson(data));
+            }
+        }
+
+        apply(editor);
+    }
+
+    public void saveAll(final Map<String, Object> data) {
+        saveAll(data.entrySet());
     }
 
     public void save(final String key, final boolean data) {
@@ -67,19 +98,19 @@ public final class DataManager {
 
     public void save(final String key, final int data) {
         final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putInt(key, (int) data);
+        editor.putInt(key, data);
         apply(editor);
     }
 
     public void save(final String key, final long data) {
         final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putLong(key, (long) data);
+        editor.putLong(key, data);
         apply(editor);
     }
 
     public void save(final String key, final float data) {
         final SharedPreferences.Editor editor = getDefaultSharedPreferences().edit();
-        editor.putFloat(key, (float) data);
+        editor.putFloat(key, data);
         apply(editor);
     }
 
@@ -91,7 +122,7 @@ public final class DataManager {
     }
 
     private void apply(SharedPreferences.Editor editor) {
-        if (needCommit) {
+        if (mNeedCommit) {
             editor.commit();
         } else {
             editor.apply();
@@ -120,7 +151,7 @@ public final class DataManager {
             return null;
         }
 
-        return gson.fromJson(string, type);
+        return mGson.fromJson(string, type);
     }
 
     public String loadString(final String key) {
@@ -186,18 +217,18 @@ public final class DataManager {
 
 
     public boolean needCommit() {
-        return needCommit;
+        return mNeedCommit;
     }
 
     public void setNeedCommit(boolean needCommit) {
-        this.needCommit = needCommit;
+        this.mNeedCommit = needCommit;
     }
 
     public Gson getGson() {
-        return gson;
+        return mGson;
     }
 
     public void setGson(Gson gson) {
-        this.gson = gson;
+        this.mGson = gson;
     }
 }
