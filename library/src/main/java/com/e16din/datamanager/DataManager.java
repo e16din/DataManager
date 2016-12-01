@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
@@ -73,9 +74,39 @@ public final class DataManager {
         saveAll(data.entrySet());
     }
 
-    public static void save(final String key, final Object data) {
+    public static void save(final String key, final int data) {
         final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        putToEditor(editor, key, data);
+        editor.putInt(key, data);
+        apply(editor);
+    }
+
+    public static void save(final String key, final boolean data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putBoolean(key, data);
+        apply(editor);
+    }
+
+    public static void save(final String key, final String data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putString(key, data);
+        apply(editor);
+    }
+
+    public static void save(final String key, final long data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putLong(key, data);
+        apply(editor);
+    }
+
+    public static void save(final String key, final float data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putFloat(key, data);
+        apply(editor);
+    }
+
+    public static void save(final String key, final Serializable data) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putString(key, getGson().toJson(data));
         apply(editor);
     }
 
