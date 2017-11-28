@@ -11,20 +11,32 @@ Based on [SharedPreferences](https://developer.android.com/reference/android/con
 public void onCreate() {
     super.onCreate();
 
-    DataManager.init(this);//set application context
+    DataManager.init(this); // set application context
 }
 ```
 
 ## Using
+
+### Java
 
 ```java
 //save
 DataManager.save(KEY_TOKEN, accessToken);
 
 //load
-DataManager.loadString(KEY_TOKEN);
-//or load
-DataManager.load(KEY_USER, User.class);
+String token = DataManager.loadString(KEY_TOKEN);
+User user = DataManager.load(KEY_USER, User.class);
+```
+
+### Kotlin
+
+```kotlin
+//save
+KEY_TOKEN.save(accessToken)
+
+//load
+val token = KEY_TOKEN.loadString()
+val user = KEY_USER.load(User.class)
 ```
 
 ## Download (Gradle)
@@ -41,6 +53,6 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.github.e16din:DataManager:0.2.1'
+    compile 'com.github.e16din:DataManager:0.3.0'
 }
 ```

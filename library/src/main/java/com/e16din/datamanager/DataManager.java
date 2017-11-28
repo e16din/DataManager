@@ -9,7 +9,6 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
@@ -52,9 +51,19 @@ public final class DataManager {
             editor.putLong(key, (Long) value);
         } else if (value instanceof Float) {
             editor.putFloat(key, (Float) value);
+        } else if (value instanceof Set) {
+            editor.putStringSet(key, (Set<String>) value);
         } else {
             editor.putString(key, getGson().toJson(value));
         }
+    }
+
+    public static void saveObj(String key, Object value) {
+        final SharedPreferences.Editor editor = getSharedPreferences().edit();
+
+        putToEditor(editor, key, value);
+
+        apply(editor);
     }
 
     public static void saveAll(final Set<Map.Entry<String, Object>> data) {
@@ -72,49 +81,6 @@ public final class DataManager {
 
     public static void saveAll(final Map<String, Object> data) {
         saveAll(data.entrySet());
-    }
-
-    public static void save(final String key, final int data) {
-        final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putInt(key, data);
-        apply(editor);
-    }
-
-    public static void save(final String key, final boolean data) {
-        final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(key, data);
-        apply(editor);
-    }
-
-    public static void save(final String key, final String data) {
-        final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putString(key, data);
-        apply(editor);
-    }
-
-    public static void save(final String key, final long data) {
-        final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putLong(key, data);
-        apply(editor);
-    }
-
-    public static void save(final String key, final float data) {
-        final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putFloat(key, data);
-        apply(editor);
-    }
-
-    public static void save(final String key, final Serializable data) {
-        final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putString(key, getGson().toJson(data));
-        apply(editor);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static void save(final String key, final Set<String> data) {
-        final SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putStringSet(key, data);
-        apply(editor);
     }
 
     private static void apply(SharedPreferences.Editor editor) {
