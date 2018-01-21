@@ -24,8 +24,8 @@ public void onCreate() {
 DataManager.save(KEY_TOKEN, accessToken);
 
 //load
-String token = DataManager.loadString(KEY_TOKEN);
-User user = DataManager.load(KEY_USER, User.class);
+String token = (String) DataManager.loadValue(KEY_TOKEN);
+User user = (User) DataManager.loadValue(KEY_USER);
 ```
 
 ### Kotlin
@@ -35,8 +35,8 @@ User user = DataManager.load(KEY_USER, User.class);
 KEY_TOKEN.save(accessToken)
 
 //load
-val token = KEY_TOKEN.loadString()
-val user = KEY_USER.load(User.class)
+val token = KEY_TOKEN.load<String>()
+val user = KEY_USER.load<User>()
 ```
 
 ## Download (Gradle)
@@ -53,6 +53,6 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.github.e16din:DataManager:0.3.0'
+    compile 'com.github.e16din:DataManager:0.4.0'
 }
 ```
