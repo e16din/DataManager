@@ -6,7 +6,6 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.util.*
 
 
 object DataManager {
@@ -78,31 +77,28 @@ object DataManager {
         apply(editor)
     }
 
-    /**
-     * Invisible for java classes
-     * todo: send an issue to kotlin issues (kotlin version 1.2.20)
-     */
     @JvmStatic
-    inline fun <reified T : Any> load(key: String, defaultValue: T? = null): T? = sharedPreferences!![key]
-            ?: defaultValue
-
-    /**
-     * Use instead load() for java classes
-     */
-    @JvmStatic
-    fun loadValue(key: String): Any? {
+    fun <T : Any?> load(key: String): T? {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return null
         } // else {
 
-        return sharedPreferences!!.all[key]
+        return sharedPreferences!!.all[key] as T?
     }
 
-    /**
-     * Use instead load() for java classes
-     */
     @JvmStatic
-    fun loadValue(key: String, defaultValue: Any?) = loadValue(key) ?: defaultValue
+    fun <T : Any?> load(key: String, defaultValue: T): T =
+            load(key) as T? ?: defaultValue
+
+    @JvmStatic
+    fun <T : Any?> load(key: String, type: Class<T?>): T? {
+        if (TextUtils.isEmpty(key) || !contains(key)) {
+            return null
+        } // else {
+
+        val string = load(key, "")
+        return gson.fromJson(string, type)
+    }
 
     private fun SharedPreferences.Editor.put(key: String, value: Any) {
         when (value) {
@@ -116,7 +112,14 @@ object DataManager {
         }
     }
 
-    inline operator fun <reified T : Any> SharedPreferences.get(key: String): T? {
+    /**
+     * Invisible for java classes
+     */
+    @JvmStatic
+    inline fun <reified T : Any?> loadk(key: String, defaultValue: T? = null): T? = sharedPreferences!![key]
+            ?: defaultValue
+
+    inline operator fun <reified T : Any?> SharedPreferences.get(key: String): T? {
         if (TextUtils.isEmpty(key) || !DataManager.contains(key)) {
             return null
         } // else {

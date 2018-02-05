@@ -9,7 +9,7 @@ public class TestJava {
 
     public static void test() {
         DataManager.save(KEY_TEST, true);
-        boolean test = (boolean) DataManager.loadValue(KEY_TEST);
+        boolean test = DataManager.load(KEY_TEST, false);
 
         Log.w("debug", "Test: " + test);
     }

@@ -14,8 +14,8 @@ fun sharedPreferences() = DataManager.sharedPreferences
 fun String.save(obj: Any) = DataManager.save(this, obj)
 
 // val str = KEY_HELLO_WORLD.load()
-inline fun <reified T : Any> String.load(defaultValue: T? = null): T? =
-        DataManager.load(this, defaultValue)
+inline fun <reified T : Any?> String.load(defaultValue: T? = null): T? =
+        DataManager.loadk(this, defaultValue)
 
 // KEY_HELLO_WORLD.remove()
 fun String.remove() = DataManager.remove(this)
