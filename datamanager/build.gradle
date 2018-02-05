@@ -10,7 +10,6 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -24,9 +23,6 @@ android {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-}
-repositories {
-    mavenCentral()
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
