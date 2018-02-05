@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
 
 
 object DataManager {
@@ -82,7 +83,8 @@ object DataManager {
      * todo: send an issue to kotlin issues (kotlin version 1.2.20)
      */
     @JvmStatic
-    inline fun <reified T : Any> load(key: String): T? = sharedPreferences!![key]
+    inline fun <reified T : Any> load(key: String, defaultValue: T? = null): T? = sharedPreferences!![key]
+            ?: defaultValue
 
     /**
      * Use instead load() for java classes
@@ -95,6 +97,12 @@ object DataManager {
 
         return sharedPreferences!!.all[key]
     }
+
+    /**
+     * Use instead load() for java classes
+     */
+    @JvmStatic
+    fun loadValue(key: String, defaultValue: Any?) = loadValue(key) ?: defaultValue
 
     private fun SharedPreferences.Editor.put(key: String, value: Any) {
         when (value) {
