@@ -13,8 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val token = KEY_TOKEN.load<String>()
-        val user = KEY_USER.load<User>()
+        val token = KEY_TOKEN.get<String>()
+        val user = KEY_USER.get<User>()
 
         Log.i("debug", "Token: $token")
         Log.i("debug", "User: ${user?.name}")

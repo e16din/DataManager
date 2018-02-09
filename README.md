@@ -21,22 +21,24 @@ public void onCreate() {
 
 ```java
 //save
-DataManager.save(KEY_TOKEN, accessToken);
+DataManager.getBox().put(KEY_TOKEN, accessToken);
 
 //load
-String token = DataManager.load(KEY_TOKEN);
-User user = DataManager.load(KEY_USER, User.class);
+DataBox dataBox = DataManager.getBox()
+
+String token = dataBox.get(KEY_TOKEN);
+User user = dataBox.get(KEY_USER, User.class);
 ```
 
 ### Kotlin
 
 ```kotlin
 //save
-KEY_TOKEN.save(accessToken)
+KEY_TOKEN.put(accessToken)
 
 //load
-val token = KEY_TOKEN.load<String>()
-val user = KEY_USER.load<User>()
+val token = KEY_TOKEN.get<String>()
+val user = KEY_USER.get<User>()
 ```
 
 ## Download (Gradle)
@@ -53,6 +55,6 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.github.e16din:DataManager:0.4.4'
+    compile 'com.github.e16din:DataManager:0.5.0'
 }
 ```

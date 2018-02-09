@@ -1,24 +1,28 @@
 package com.e16din.datamanager
 
 import android.app.Application
+import com.google.gson.reflect.TypeToken
 
 
 fun Application.initDataManager() {
     DataManager.init(this)
 }
 
-fun gson() = DataManager.gson
-fun sharedPreferences() = DataManager.sharedPreferences
+val GSON = DataManager.gson
 
-// KEY_HELLO_WORLD.save("Hello World")
-fun String.save(obj: Any) = DataManager.save(this, obj)
+fun <T> fromJson(json: String) = DataManager.gson.fromJson<T>(json, object : TypeToken<T>() {}.type)
 
-// val str = KEY_HELLO_WORLD.load()
-inline fun <reified T : Any?> String.load(defaultValue: T? = null): T? =
-        DataManager.loadk(this, defaultValue)
+fun toJson(obj: Any) = DataManager.gson.toJson(obj)
+
+// KEY_HELLO_WORLD.put("Hello World")
+fun String.put(obj: Any) = DataManager.getBox().put(this, obj)
+
+// val str = KEY_HELLO_WORLD.get()
+inline fun <reified T : Any?> String.get(defaultValue: T? = null): T? =
+        DataManager.getBox().get(this, defaultValue)
 
 // KEY_HELLO_WORLD.remove()
-fun String.remove() = DataManager.remove(this)
+fun String.remove() = DataManager.getBox().remove(this)
 
 // if (KEY_HELLO_WORLD.exist()) { ... }
-fun String.exist() = DataManager.contains(this)
+fun String.exist() = DataManager.getBox().contains(this)

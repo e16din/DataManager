@@ -10,7 +10,7 @@ class App : Application() {
 
         initDataManager()
 
-        KEY_TOKEN.save("token")
-        KEY_USER.save(User(name = "Alex"))
+        KEY_TOKEN.put("token")
+        KEY_USER.put(User(name = "Alex"))
     }
 }
