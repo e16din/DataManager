@@ -16,14 +16,19 @@ object DataManager {
             try {
                 return field
             } catch (e: NullPointerException) {
-                throw NullPointerException("Please initialize DataManager. DataManager.init(context))")
+                throw NullPointerException("Please initialize DataManager. DataManager.init())")
             }
         }
     var useCommit = true
 
     @JvmStatic
     fun init(context: Context) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        init(PreferenceManager.getDefaultSharedPreferences(context))
+    }
+
+    @JvmStatic
+    fun init(sharedPreferences: SharedPreferences?) {
+        this.sharedPreferences = sharedPreferences
     }
 
     @JvmStatic
@@ -89,6 +94,10 @@ object DataManager {
     @JvmStatic
     fun <T : Any?> load(key: String, defaultValue: T): T =
             load(key) as T? ?: defaultValue
+
+    @JvmStatic
+    fun <T : Any?> load(key: String, type: Class<T?>, defaultValue: T?): T? =
+            load(key, type) ?: defaultValue
 
     @JvmStatic
     fun <T : Any?> load(key: String, type: Class<T?>): T? {
