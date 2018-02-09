@@ -7,19 +7,33 @@ import android.text.TextUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-
 object DataManager {
 
+    private const val MESSAGE_NEED_TO_INIT = "Please, initialize DataManager. DataManager.init())"
+
     val gson = Gson()
+        @JvmStatic get
+
     var sharedPreferences: SharedPreferences? = null
-        get() {
+        @JvmStatic get() {
             try {
                 return field
             } catch (e: NullPointerException) {
-                throw NullPointerException("Please initialize DataManager. DataManager.init())")
+                throw NullPointerException(MESSAGE_NEED_TO_INIT)
             }
         }
+
+    @JvmStatic
     var useCommit = true
+
+    val all: Map<String, *>
+        @JvmStatic get() {
+            try {
+                return sharedPreferences!!.all
+            } catch (e: NullPointerException) {
+                throw NullPointerException(MESSAGE_NEED_TO_INIT)
+            }
+        }
 
     @JvmStatic
     fun init(context: Context) {
@@ -88,7 +102,7 @@ object DataManager {
             return null
         } // else {
 
-        return sharedPreferences!!.all[key] as T?
+        return all[key] as T?
     }
 
     @JvmStatic
@@ -108,6 +122,7 @@ object DataManager {
         val string = load(key, "")
         return gson.fromJson(string, type)
     }
+
 
     private fun SharedPreferences.Editor.put(key: String, value: Any) {
         when (value) {
