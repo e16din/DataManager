@@ -51,6 +51,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.e16din:DataManager:0.5.1'
+    compile 'com.github.e16din:DataManager:0.5.2'
 }
 ```

@@ -9,7 +9,7 @@ const val ID_DEFAULT = "ID_DEFAULT"
 
 object DataManager {
 
-    private const val MESSAGE_NEED_TO_INIT = "Please, initialize DataManager. DataManager.init())"
+    private const val MESSAGE_NEED_TO_INIT = "Please, initialize a data box. DataManager.initDefaultDataBox())"
 
     val gson = Gson()
         @JvmStatic get
@@ -33,22 +33,27 @@ object DataManager {
     fun getBox() = getBox(ID_DEFAULT)
 
     @JvmStatic
-    fun init(context: Context) {
-        init(PreferenceManager.getDefaultSharedPreferences(context))
+    fun initDefaultDataBox(context: Context) =
+            initDefaultDataBox(PreferenceManager.getDefaultSharedPreferences(context))
+
+    @JvmStatic
+    fun initDefaultDataBox(sharedPreferences: SharedPreferences): DataBox {
+        val dataBox = DataBox(sharedPreferences)
+        boxesMap[ID_DEFAULT] = dataBox
+        return dataBox
     }
 
     @JvmStatic
-    fun init(sharedPreferences: SharedPreferences) {
-        boxesMap[ID_DEFAULT] = DataBox(sharedPreferences)
+    fun addDataBox(context: Context, id: String): DataBox {
+        val dataBox = DataBox(context.getSharedPreferences(id, Context.MODE_PRIVATE))
+        boxesMap[id] = dataBox
+        return dataBox
     }
 
     @JvmStatic
-    fun addDataBox(context: Context, id: String) {
-        boxesMap[id] = DataBox(context.getSharedPreferences(id, Context.MODE_PRIVATE))
-    }
-
-    @JvmStatic
-    fun addDataBox(sharedPreferences: SharedPreferences, id: String) {
-        boxesMap[id] = DataBox(sharedPreferences)
+    fun addDataBox(sharedPreferences: SharedPreferences, id: String): DataBox {
+        val dataBox = DataBox(sharedPreferences)
+        boxesMap[id] = dataBox
+        return dataBox
     }
 }

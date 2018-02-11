@@ -5,7 +5,7 @@ import java.lang.reflect.Type
 
 
 fun Application.initDataManager() {
-    DataManager.init(this)
+    DataManager.initDefaultDataBox(this)
 }
 
 val GSON = DataManager.gson

@@ -69,8 +69,8 @@ class DataBox(val sharedPreferences: SharedPreferences) {
             return null
         } // else {
 
-        val json = all[key] as String
-        return fromJson<T>(json, type)
+        val json: String? = sharedPreferences[key]
+        return fromJson<T>(json!!, type)
     }
 
     fun <T : Any?> get(key: String, type: Type, defaultValue: T): T? {
@@ -105,8 +105,8 @@ class DataBox(val sharedPreferences: SharedPreferences) {
             Long::class -> getLong(key, 1) as T?
             Set::class -> getStringSet(key, HashSet<String>()) as T?
             else -> {
-                val string = getString(key, "")
-                fromJson<T>(string, object : TypeToken<T>() {}.type)
+                val json = getString(key, "")
+                fromJson<T>(json, object : TypeToken<T>() {}.type)
             }
         }
     }
