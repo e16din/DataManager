@@ -13,12 +13,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        test()
+        TestJava.test(DataManager.getBox())
+    }
+
+    private fun test() {
+        KEY_TOKEN.put("token")
+        KEY_USER.put(User(name = "Alex"))
+
         val token = KEY_TOKEN.get<String>()
         val user = KEY_USER.get<User>()
 
         Log.i("debug", "Token: $token")
         Log.i("debug", "User: ${user?.name}")
-
-        TestJava.test()
     }
 }

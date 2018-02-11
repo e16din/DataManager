@@ -17,28 +17,30 @@ public void onCreate() {
 
 ## Using
 
+### Kotlin
+
+```kotlin
+//save
+KEY_TOKEN.put(accessToken)
+KEY_USER.put(user)
+
+//load
+val token = KEY_TOKEN.get<String>()
+val user = KEY_USER.get<User>()
+```
+
 ### Java
 
 ```java
 //save
 DataManager.getBox().put(KEY_TOKEN, accessToken);
+DataManager.getBox().put(KEY_USER, user);
 
 //load
 DataBox dataBox = DataManager.getBox()
 
 String token = dataBox.get(KEY_TOKEN);
 User user = dataBox.get(KEY_USER, User.class);
-```
-
-### Kotlin
-
-```kotlin
-//save
-KEY_TOKEN.put(accessToken)
-
-//load
-val token = KEY_TOKEN.get<String>()
-val user = KEY_USER.get<User>()
 ```
 
 ## Download (Gradle)
@@ -48,13 +50,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-buildscript {
-    repositories {
-        maven { url "https://jitpack.io" }
-    }
-}
-
 dependencies {
-    compile 'com.github.e16din:DataManager:0.5.0'
+    compile 'com.github.e16din:DataManager:0.5.1'
 }
 ```

@@ -9,8 +9,5 @@ class App : Application() {
         super.onCreate()
 
         initDataManager()
-
-        KEY_TOKEN.put("token")
-        KEY_USER.put(User(name = "Alex"))
     }
 }

@@ -2,12 +2,10 @@ package com.e16din.datamanager
 
 import android.content.SharedPreferences
 import android.text.TextUtils
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 
 class DataBox(val sharedPreferences: SharedPreferences) {
-
-    companion object {
-        private const val PREFIX_CUSTOM_OBJECT_KEY = "*JO_"
-    }
 
     var useCommit = true
 
@@ -57,25 +55,26 @@ class DataBox(val sharedPreferences: SharedPreferences) {
     }
 
     fun <T : Any?> get(key: String): T? {
-        if (TextUtils.isEmpty(key) || !contains(key)) {
+        if (TextUtils.isEmpty(key)) {
             return null
         } // else {
 
-        return if (key.startsWith(PREFIX_CUSTOM_OBJECT_KEY))
-            getObject(key)
-        else
-            all[key] as T?
+        return all[key] as T?
     }
 
     fun <T : Any?> get(key: String, defaultValue: T): T = get(key) as T? ?: defaultValue
 
-    private fun <T : Any?> getObject(key: String): T? {
+    fun <T : Any?> get(key: String, type: Type): T? {
         if (TextUtils.isEmpty(key) || !contains(key)) {
             return null
         } // else {
 
-        val json = get(key, "")
-        return fromJson<T>(json)
+        val json = all[key] as String
+        return fromJson<T>(json, type)
+    }
+
+    fun <T : Any?> get(key: String, type: Type, defaultValue: T): T? {
+        return get(key, type) as T? ?: defaultValue
     }
 
     private fun SharedPreferences.Editor.put(key: String, value: Any) {
@@ -86,7 +85,29 @@ class DataBox(val sharedPreferences: SharedPreferences) {
             is Long -> this.putLong(key, value)
             is Float -> this.putFloat(key, value)
             is Set<*> -> this.putStringSet(key, value as Set<String>)
-            else -> this.putString("$PREFIX_CUSTOM_OBJECT_KEY$key", toJson(value))
+            else -> this.putString(key, toJson(value))
+        }
+    }
+
+    inline fun <reified T : Any?> getk(key: String, defaultValue: T? = null): T? =
+            sharedPreferences[key] ?: defaultValue
+
+    inline operator fun <reified T : Any?> SharedPreferences.get(key: String): T? {
+        if (TextUtils.isEmpty(key) || !contains(key)) {
+            return null
+        } // else {
+
+        return when (T::class) {
+            String::class -> getString(key, "") as T?
+            Int::class -> getInt(key, 1) as T?
+            Boolean::class -> getBoolean(key, false) as T?
+            Float::class -> getFloat(key, 1f) as T?
+            Long::class -> getLong(key, 1) as T?
+            Set::class -> getStringSet(key, HashSet<String>()) as T?
+            else -> {
+                val string = getString(key, "")
+                fromJson<T>(string, object : TypeToken<T>() {}.type)
+            }
         }
     }
 }

@@ -3,17 +3,17 @@ package com.e16din.datamanager;
 
 import android.util.Log;
 
+import static com.e16din.datamanager.DataManagerExtKt.toJson;
+
 public class TestJava {
 
     public static final String KEY_TEST = "Test";
 
-    public static void test() {
-        DataBox dataBox = DataManager.getBox();
+    public static void test(DataBox dataBox) {
+        dataBox.put(KEY_TEST, new TestObject());
 
-        dataBox.put(KEY_TEST, true);
+        TestObject test = dataBox.get(KEY_TEST, TestObject.class);
 
-        boolean test = dataBox.get(KEY_TEST, false);
-
-        Log.w("debug", "Test: " + test);
+        Log.i("debug", "Test: " + toJson(test));
     }
 }
