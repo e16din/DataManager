@@ -14,7 +14,7 @@ class DataBox(val sharedPreferences: SharedPreferences) {
 
     operator fun contains(key: String) = sharedPreferences.contains(key)
 
-    fun put(key: String, value: Any) {
+    fun put(key: String, value: Any?) {
         val editor = sharedPreferences.edit()
         editor.put(key, value)
         apply(editor)
@@ -77,14 +77,14 @@ class DataBox(val sharedPreferences: SharedPreferences) {
         return get(key, type) as T? ?: defaultValue
     }
 
-    private fun SharedPreferences.Editor.put(key: String, value: Any) {
+    private fun SharedPreferences.Editor.put(key: String, value: Any?) {
         when (value) {
             is Int -> this.putInt(key, value)
             is Boolean -> this.putBoolean(key, value)
             is String -> this.putString(key, value)
             is Long -> this.putLong(key, value)
             is Float -> this.putFloat(key, value)
-            is Set<*> -> this.putStringSet(key, value as Set<String>)
+            is Set<*> -> this.putStringSet(key, value as Set<String>?)
             else -> this.putString(key, toJson(value))
         }
     }

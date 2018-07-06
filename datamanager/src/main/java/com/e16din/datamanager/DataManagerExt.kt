@@ -12,10 +12,10 @@ val GSON = DataManager.gson
 
 fun <T> fromJson(json: String, type: Type) = GSON.fromJson<T>(json, type)
 
-fun toJson(obj: Any) = GSON.toJson(obj)
+fun toJson(obj: Any?) = GSON.toJson(obj)
 
 // KEY_HELLO_WORLD.put("Hello World")
-fun String.put(obj: Any) = DataManager.getBox().put(this, obj)
+fun String.put(obj: Any?) = DataManager.getBox().put(this, obj)
 
 // val str = KEY_HELLO_WORLD.get()
 inline fun <reified T : Any?> String.get(defaultValue: T? = null): T? =
