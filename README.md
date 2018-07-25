@@ -51,6 +51,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.e16din:DataManager:0.5.3'
+    implementation 'com.github.e16din:DataManager:0.5.4'
 }
 ```

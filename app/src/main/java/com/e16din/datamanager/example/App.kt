@@ -1,7 +1,7 @@
-package com.e16din.datamanager
+package com.e16din.datamanager.example
 
-import android.app.Application
 import android.support.multidex.MultiDexApplication
+import com.e16din.datamanager.initDataManager
 
 data class User(var name: String)
 

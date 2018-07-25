@@ -1,7 +1,9 @@
-package com.e16din.datamanager;
+package com.e16din.datamanager.example;
 
 
 import android.util.Log;
+
+import com.e16din.datamanager.DataBox;
 
 import static com.e16din.datamanager.DataManagerExtKt.toJson;
 

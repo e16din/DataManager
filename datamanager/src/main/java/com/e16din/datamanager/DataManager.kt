@@ -3,6 +3,7 @@ package com.e16din.datamanager
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.util.Log
 import com.google.gson.Gson
 
 const val ID_DEFAULT = "ID_DEFAULT"
@@ -18,9 +19,10 @@ object DataManager {
         @JvmStatic get
 
     @JvmStatic
-    fun getBox(dataBoxId: String): DataBox {
+    fun getBox(dataBoxId: String): DataBox? {
         if (boxesMap.size == 0) {
-            throw NullPointerException(MESSAGE_NEED_TO_INIT)
+            Log.w("warning", MESSAGE_NEED_TO_INIT)
+            return null
         } // else {
 
         return if (dataBoxId.isEmpty())

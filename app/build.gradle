@@ -7,7 +7,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        applicationId "com.e16din.datamanager"
+        applicationId "com.e16din.datamanager.example"
         minSdkVersion 14
         targetSdkVersion 27
         versionCode 1

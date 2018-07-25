@@ -1,8 +1,11 @@
-package com.e16din.datamanager
+package com.e16din.datamanager.example
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.e16din.datamanager.DataManager
+import com.e16din.datamanager.get
+import com.e16din.datamanager.put
 
 const val KEY_TOKEN = "Token"
 const val KEY_USER = "User"

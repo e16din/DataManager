@@ -1,4 +1,4 @@
-package com.e16din.datamanager;
+package com.e16din.datamanager.example;
 
 import java.io.Serializable;
 
