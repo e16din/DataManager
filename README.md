@@ -11,7 +11,7 @@ Based on [SharedPreferences](https://developer.android.com/reference/android/con
 public void onCreate() {
     super.onCreate();
 
-    DataManager.init(this); // set application context
+    DataManager.initDefaultDataBox(this)
 }
 ```
 
