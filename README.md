@@ -20,6 +20,9 @@ public void onCreate() {
 ### Kotlin
 
 ```kotlin
+const val KEY_TOKEN = "KEY_TOKEN"
+const val KEY_USER = "KEY_USER"
+
 //save
 KEY_TOKEN.put(accessToken)
 KEY_USER.put(user)
@@ -51,6 +54,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.e16din:DataManager:0.5.4'
+    compile 'com.github.e16din:DataManager:0.5.5'
 }
 ```
