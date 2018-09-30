@@ -1,9 +1,33 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'datamanager'
+
+    publishedGroupId = 'com.github.e16din'
+    libraryName = libraryName
+    artifact = bintrayName
+
+    libraryDescription = 'DataManager'
+
+    siteUrl = siteUrl
+    gitUrl = gitUrl
+
+    libraryVersion = version_name
+
+    developerId = 'e16din'
+    developerName = 'Aleksandr Kundryukov'
+    developerEmail = 'a.kundryukov@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.2"
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 14
@@ -26,3 +50,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
+
+apply from: '../installv1.gradle'
+apply from: '../bintrayv1.gradle'

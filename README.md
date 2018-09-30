@@ -50,10 +50,10 @@ User user = dataBox.get(KEY_USER, User.class);
 
 ```groovy
 repositories {
-    maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/e16din/maven" }
 }
 
 dependencies {
-    compile 'com.github.e16din:DataManager:0.5.5'
+    compile 'com.github.e16din:DataManager:0.5.6'
 }
 ```
